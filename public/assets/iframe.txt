@@ -1,0 +1,4 @@
+<iframe
+                        className="h-8 flex items-start justify-start w-48 -ml-5"
+                        src="https://lottie.host/embed/8e243216-618c-4f4a-bb6a-a47b0b15e206/08YzV1Qi2b.lottie"
+                      ></iframe>

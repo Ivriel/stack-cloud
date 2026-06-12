@@ -4,6 +4,9 @@ import { ID, Query } from "node-appwrite";
 import { createAdminClient } from ".";
 import { appwriteConfig } from "./appwriteConfig";
 import { cookies } from "next/headers";
+import { USER_ICON } from "../constants";
+import { redirect } from "next/navigation";
+import { parseObj } from "@/lib/utils";
 
 /* create account (fullname,email)
 1. get existing user by email 
@@ -58,7 +61,7 @@ export const createAccount = async({fullName,email}:{fullName:string;email:strin
             data:{
                 fullName,
                 email,
-                avatar:"https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001877.png",
+                avatar:USER_ICON,
                 accountId
             }
         })
@@ -115,5 +118,59 @@ export const verifySecret = async ({accountId,password}:{accountId:string;passwo
         return {sessionId:session.$id}
     } catch (error) {
         console.error("Failed to verify the OTP",error)
+    }
+}
+
+// 1.cookie store access -> appwite session -> session ID
+//2.call create admin client() => account
+// 3. account -> delete the session by passing the id
+// 4. clear the cookie -> appwrite session and appwrite user id
+export const signOutUser = async() => {
+    const cookieStore = await cookies();
+
+    try {
+        const sessionId = cookieStore.get("appwrite-session");
+        if(sessionId?.value) {
+            const {account} = await createAdminClient();
+
+            try {
+                await account.deleteSession({sessionId:sessionId.value})
+            } catch (error) {
+                console.error("Failed to delete the session from appwrite:",error)
+            }
+        }
+    } catch (error) {
+        console.error("Error during logout",error);
+    } finally {
+        cookieStore.delete("appwrite-session");
+        cookieStore.delete("appwrite-user-id");
+    }
+
+    redirect("/auth");
+}
+
+//1.user id from cookie store
+//2.create admin client() => databases
+// 3. query in the database with the user id and return the user.
+export const getCurrentUser = async() => {  
+    try {
+        const cookieStore = await cookies();
+        const userId = cookieStore.get("appwrite-user-id")
+
+        if(!userId?.value) {
+            return null;
+        }
+
+        const {databases} = await createAdminClient();
+        const user = await databases.listRows({
+            databaseId:appwriteConfig.databaseId,
+            tableId:appwriteConfig.usersCollectionId,
+            queries:[Query.equal("accountId",[userId.value])]
+        })
+
+        return user.total > 0 ? parseObj(user.rows[0]) : null;
+    } catch (error) {
+        console.error("Error while fetching the current user:",error)
+        return null;
     }
 }

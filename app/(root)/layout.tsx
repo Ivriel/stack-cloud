@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/lib/appwrite/user.actions";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import React from "react";
+import { Toaster } from "sonner";
 
 export const metadata:Metadata  = {
     title:"StackCloud",
@@ -23,13 +24,13 @@ const Layout = async({children}:{children:React.ReactNode}) => {
         {/* todo: pass fullName, and fileSize */}
         <Sidebar fullName={user?.fullName} fileSize="52.2"/>
         <section className="flex h-full flex-1 flex-col">
-            <div>
-                <Header />
-            </div>
+            <Header ownerId={user.ownerId} accountId={user.accountId}/>
             <div className="bg-gray-50 shadow m-4 h-full rounded-2xl">
                 {children}
             </div>
         </section>
+
+        <Toaster />
     </main>
 }
 

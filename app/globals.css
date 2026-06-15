@@ -17,6 +17,13 @@
   --color-persian-pink: #f875aa;
   --color-persimmon: #ff5b5b;
   --color-jaffa: #f68048;
+
+  --animate-shimmer: shimmer 1.4s ease-in-out infinite;
+
+  @keyframes shimmer {
+    0%   { left: -45%; }
+    100% { left: 105%; }
+  }
 }
 
 @theme inline {
@@ -142,4 +149,8 @@
   html {
     @apply font-sans;
   }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
 }

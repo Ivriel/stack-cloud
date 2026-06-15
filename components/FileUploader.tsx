@@ -2,7 +2,7 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "./ui/button";
-import { UploadCloudIcon, UploadIcon, X } from "lucide-react";
+import { UploadCloudIcon, X } from "lucide-react";
 import Preview from "./Preview";
 import { convertFileToUrl, getFileType } from "@/lib/utils";
 import { MAX_FILE_SIZE } from "@/lib/constants";
@@ -68,14 +68,19 @@ const FileUploader = ({ownerId,accountId}:{ownerId:string;accountId:string}) => 
                 <div className="flex items-center gap-4 mt-6">
                   <div className="flex items-center gap-2">
                     <Preview type={type} extension={extension} url={convertFileToUrl(file)} classNames="w-15 h-15" imgClassNames="h-10 w-10"/>
-                    <div className="flex flex-col">
-                      <span className="w-60 truncate">{file.name}</span>
-                      <iframe
-                        className="h-8 flex items-start justify-start w-48 -ml-5"
-                        src="
-                    https://lottie.host/embed/8e243216-618c-4f4a-bb6a-a47b0b15e206/08YzV1Qi2b.lottie
-"
-                      ></iframe>
+                    <div className="flex flex-col gap-1.5 w-52">
+                      <span className="text-sm font-medium truncate">{file.name}</span>
+                      {/* indeterminate shimmer bar */}
+                      <div className="relative h-1.5 w-full rounded-full bg-froly/20 overflow-hidden">
+                        <div
+                          className="absolute inset-y-0 w-2/5 rounded-full"
+                          style={{
+                            background: "linear-gradient(90deg, transparent 0%, #f57799 40%, #ff99b8 60%, transparent 100%)",
+                            animation: "shimmer 1.4s ease-in-out infinite",
+                          }}
+                        />
+                      </div>
+                      <span className="text-[11px] text-gray-400 tracking-wide">Uploading…</span>
                     </div>
                   </div>
                     <div className="bg-gray-400 p-0.5 cursor-pointer rounded-full" onClick={(e) =>handleRemoveFile(e,file.name)}>

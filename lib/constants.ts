@@ -1,4 +1,4 @@
-import { ChartPie, Files, Images, LayoutDashboard, LucideIcon, PictureInPicture } from 'lucide-react';
+import { ChartPie, Download, Files, FolderPen, Images, Info, LayoutDashboard, LucideIcon, PictureInPicture, Share, Trash } from 'lucide-react';
 
 export const SIDEBAR_ITEMS: { name: string; icon: LucideIcon; url: string }[] = [
   {
@@ -25,6 +25,50 @@ export const SIDEBAR_ITEMS: { name: string; icon: LucideIcon; url: string }[] = 
     name:"Others",
     icon:ChartPie,
     url:"/others"
+  }
+]
+
+export const ACTION_ITEMS:{
+  value:string;
+  label:string;
+  icon:LucideIcon,
+  iconColor:string;
+  iconBgColor:string;
+}[] =[
+ {
+    value: "rename",
+    label: "Rename",
+    icon: FolderPen,
+    iconColor: "text-bright-turquoise",
+    iconBgColor: "bg-bright-turquoise/10",
+  },
+  {
+    value: "details",
+    label: "Details",
+    icon: Info,
+    iconColor: "text-froly",
+    iconBgColor: "bg-froly/10",
+  },
+  {
+    value: "share",
+    label: "Share",
+    icon: Share,
+    iconColor: "text-flamenco",
+    iconBgColor: "bg-flamenco/10",
+  },
+  {
+    value: "download",
+    label: "Download",
+    icon: Download,
+    iconColor: "text-cornflower-blue",
+    iconBgColor: "bg-cornflower-blue/10",
+  },
+  {
+    value: "delete",
+    label: "Delete",
+    icon: Trash,
+    iconColor: "text-persimmon",
+    iconBgColor: "bg-persimmon/10",
   }
 ]
 

@@ -10,7 +10,7 @@ import React from "react";
 import { Toaster } from "sonner";
 
 export const metadata:Metadata  = {
-    title:"StackCloud",
+    title:"UpThings",
     description:"Store securely and manage freely"
 }
 
@@ -20,12 +20,12 @@ const Layout = async({children}:{children:React.ReactNode}) => {
     if(!user) {
         redirect("/auth")
     }
-    return <main className="flex h-screen bg-white">
+    return <main className="flex h-screen overflow-hidden bg-white">
         {/* todo: pass fullName, and fileSize */}
-        <Sidebar fullName={user?.fullName} fileSize="52.2"/>
-        <section className="flex h-full flex-1 flex-col">
-            <Header ownerId={user.ownerId} accountId={user.accountId}/>
-            <div className="bg-gray-50 shadow m-4 h-full rounded-2xl">
+        <Sidebar fullName={user?.fullName} fileSize="3.2"/>
+        <section className="flex h-full flex-1 flex-col min-w-0">
+            <Header ownerId={user.$id} accountId={user.accountId}/>
+            <div className="bg-gray-50 shadow m-4 rounded-2xl flex-1 overflow-y-auto">
                 {children}
             </div>
         </section>

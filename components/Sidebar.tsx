@@ -15,7 +15,7 @@ const Sidebar = ({fullName,fileSize}:{fullName:string;fileSize:string;}) => {
     {/* Logo */}
     <div className='flex items-center justify-start gap-3'>
         <Layers className='w-10 h-10 text-froly'/>
-        <span className='font-medium text-xl'>StackCloud</span>
+        <span className='font-medium text-xl'>UpThings</span>
     </div>
 
     {/* Nav items — flex-1 biar ambil sisa space */}

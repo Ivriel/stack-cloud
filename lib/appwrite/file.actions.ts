@@ -1,11 +1,12 @@
 "use server";
 
-import { ID } from "node-appwrite";
+import { ID, Models, Query } from "node-appwrite";
 import { createAdminClient } from ".";
 import { appwriteConfig } from "./appwriteConfig";
 import { constructFileUrl, getFileType, parseObj } from "../utils";
 import { error } from "console";
 import { revalidatePath } from "next/cache";
+import { getCurrentUser } from "./user.actions";
 
 // upload File
 /* file , owner Id,accountId,path */
@@ -36,10 +37,11 @@ export const uploadFile = async ({file,ownerId,accountId,path}:{
             url:constructFileUrl(bucketFile.$id),
             extension:getFileType(bucketFile.name).extension,
             size:bucketFile.sizeOriginal,
-            owner:ownerId,
+            owner:[ownerId],
             accountId,
             users: [],
-            bucketFileId:bucketFile.$id
+            bucketFileId:bucketFile.$id,
+            ownerId
         }
 
         const newFile = await databases.createRow({
@@ -60,5 +62,41 @@ export const uploadFile = async ({file,ownerId,accountId,path}:{
         return parseObj(newFile)
     } catch (error) {
         console.error("Failed to upload file:",error)
+    }
+}
+
+const createQueries = (currentUser:Models.DefaultRow,types:string[],query:string,filter:string) => {
+    const queries = [
+        Query.or([
+            Query.equal("ownerId",[currentUser.$id]),
+            Query.contains("users",[currentUser.email])
+        ])
+    ]
+    // types query and filter.
+    if(types.length > 0) {
+        queries.push(Query.equal("type",types))
+    }
+    return queries;
+}
+
+
+export const getFiles = async({types = [],query,filter = "$createdAt-asc"}:{types:string[];query:string;filter?:string;})=> {
+    const {databases} = await createAdminClient();
+
+    try {
+        const currentUser = await getCurrentUser();
+        if(!currentUser) {
+            console.log("User not found");
+            return;
+        }
+        const queries = createQueries(currentUser,types,query,filter);
+        const files = await databases.listRows({
+            databaseId:appwriteConfig.databaseId,
+            tableId:appwriteConfig.filesCollectionId,
+            queries
+        });
+        return parseObj(files)
+    } catch (error) {
+        console.error("Failed to retrieve file:",error)
     }
 }

@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
       {
         protocol:"https",
         hostname:"lottie.host"
+      },
+      {
+        protocol:"https",
+        hostname:"cdn-icons-png.flaticon.com"
+      },
+      {
+        protocol:"https",
+        hostname:"sgp.cloud.appwrite.io"
       }
       // tambah domain lain kalau nanti butuh, contoh:
       // { protocol: "https", hostname: "lh3.googleusercontent.com" }, // Google avatar

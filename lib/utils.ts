@@ -186,7 +186,7 @@ export const getFileSize = (sizeInBytes: number) => {
 export const formatDateTime = (isoString: string) => {
   const date = new Date(isoString);
 
-  const month = date.toLocaleString("en-IN", { month: "short" });
+  const month = date.toLocaleString("id-ID", { month: "short" });
   const day = date.getDate();
   const year = date.getFullYear();
 

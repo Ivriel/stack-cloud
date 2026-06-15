@@ -17,8 +17,12 @@ import { constructDownloadUrl } from "@/lib/utils";
 import { ActionItem } from "@/lib/types";
 import { Input } from "./ui/input";
 import ButtonWithLoading from "./ButtonWithLoading";
+import { renameFile } from "@/lib/appwrite/file.actions";
+import { usePathname } from "next/navigation";
+import FileDetails from "./FileDetails";
 
 const ActionDropdown = ({ file }: { file: Models.DefaultRow }) => {
+  const path = usePathname();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isActionListOpen, setIsActionListOpen] = useState(false);
   const [actionItem, setActionItem] = useState<ActionItem | null>(null);
@@ -34,7 +38,32 @@ const ActionDropdown = ({ file }: { file: Models.DefaultRow }) => {
     setEmails([""]);
   };
 
-  const handleAction = () => {}
+  const handleAction = async() => {
+    if(!actionItem) {
+        return;
+    }
+
+    setLoading(true);
+    let success = false;
+
+    const actions = {
+        rename:()=> {
+          return renameFile({
+            fileId:file.$id,
+            name:fileName,
+            extension:file.extension,
+            path
+          })
+        },
+        share:()=> {},
+        delete:()=> {}
+    }
+    success = await actions[actionItem.value as  keyof typeof actions]();
+    if(success) {
+      handleCloseAllModals();
+    }
+    setLoading(false);
+  }
 
   const renderDialogContent = () => {
     if (!isModalOpen) {
@@ -48,7 +77,7 @@ const ActionDropdown = ({ file }: { file: Models.DefaultRow }) => {
 
           {value === 'rename' && <Input type="text" value={fileName} onChange={(e) => setFileName(e.target.value) }/>}
 
-          {value === 'details' && <span>FileDetails</span>}
+          {value === 'details' && <FileDetails file={file}/>}
           {value === 'share' && <span>Share</span>}
           {value === 'delete' && <p className="text-center text-gray-700">Are you sure to delete file <span className="font-medium text-froly">{file.name}</span>?. <b>This action is irreversible!</b> </p>}
           {["rename","delete","share"].includes(value) && 

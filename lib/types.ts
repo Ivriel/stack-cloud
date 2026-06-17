@@ -18,7 +18,7 @@ export type ActionItem = {
 };
 
 export type ShareFile = {
-  fileId: string;
+  fieldId: string;
   emails: string[];
   path: string;
 };

@@ -17,9 +17,10 @@ import { constructDownloadUrl } from "@/lib/utils";
 import { ActionItem } from "@/lib/types";
 import { Input } from "./ui/input";
 import ButtonWithLoading from "./ButtonWithLoading";
-import { renameFile } from "@/lib/appwrite/file.actions";
+import { deleteFile, renameFile, shareFile } from "@/lib/appwrite/file.actions";
 import { usePathname } from "next/navigation";
 import FileDetails from "./FileDetails";
+import Share from "./Share";
 
 const ActionDropdown = ({ file }: { file: Models.DefaultRow }) => {
   const path = usePathname();
@@ -55,8 +56,20 @@ const ActionDropdown = ({ file }: { file: Models.DefaultRow }) => {
             path
           })
         },
-        share:()=> {},
-        delete:()=> {}
+        share:()=> {
+          return shareFile({
+            fieldId:file.$id,
+            emails,
+            path
+          })
+        },
+        delete:()=> {
+          return deleteFile({
+            fileId:file.$id,
+            bucketFileId:file.bucketFileId,
+            path
+          })
+        }
     }
     success = await actions[actionItem.value as  keyof typeof actions]();
     if(success) {
@@ -71,14 +84,14 @@ const ActionDropdown = ({ file }: { file: Models.DefaultRow }) => {
     }
     const { label,value = "" } = actionItem || {};
     return (
-      <DialogContent className="rounded-2xl w-100">
+      <DialogContent className="rounded-2xl w-[400px] max-h-[90vh] overflow-y-auto">
         <DialogHeader className="flex flex-col gap-4">
           <DialogTitle className="text-center text-gray-600">{label}</DialogTitle>
 
           {value === 'rename' && <Input type="text" value={fileName} onChange={(e) => setFileName(e.target.value) }/>}
 
           {value === 'details' && <FileDetails file={file}/>}
-          {value === 'share' && <span>Share</span>}
+          {value === 'share' && <Share file={file} onEmailChange={setEmails}/>}
           {value === 'delete' && <p className="text-center text-gray-700">Are you sure to delete file <span className="font-medium text-froly">{file.name}</span>?. <b>This action is irreversible!</b> </p>}
           {["rename","delete","share"].includes(value) && 
           <DialogFooter className="flex items-center justify-between mt-2">

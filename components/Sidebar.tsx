@@ -27,7 +27,7 @@ const AppSidebar = ({ fullName, fileSize, usedPercent }: AppSidebarProps) => {
   const pathname = usePathname();
 
   return (
-    <Sidebar collapsible="offcanvas" className="border-r border-gray-100 bg-white [--sidebar-accent:theme(colors.froly)] [--sidebar-accent-foreground:theme(colors.white)]">
+    <Sidebar collapsible="offcanvas" className="border-r border-gray-100 bg-white [--sidebar-accent:var(--color-froly)] [--sidebar-accent-foreground:var(--color-white)]">
       {/* Logo */}
       <SidebarHeader className="px-4 pt-6 pb-2">
         <div className="flex items-center gap-3">
@@ -67,8 +67,11 @@ const AppSidebar = ({ fullName, fileSize, usedPercent }: AppSidebarProps) => {
       {/* Storage + user */}
       <SidebarFooter className="px-4 pb-4 gap-4">
         <div className="bg-froly rounded-xl px-4 pt-3 pb-4">
-          <span className="text-white font-semibold block">Storage</span>
-          <span className="text-white/90 text-sm">{fileSize} of 6GB</span>
+          <div className="flex items-center justify-between">
+            <span className="text-white font-semibold">Storage</span>
+            <span className="text-white/80 text-xs font-medium">{usedPercent}% used</span>
+          </div>
+          <span className="text-white/80 text-xs mt-0.5 block">{fileSize} of 2 GB</span>
           <Progress percentage={usedPercent} />
         </div>
 

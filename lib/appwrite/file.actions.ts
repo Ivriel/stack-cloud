@@ -181,12 +181,22 @@ export const shareFile = async ({ fieldId, emails, path }: ShareFile) => {
   const { databases } = await createAdminClient();
 
   try {
+    // Fetch existing users first to merge, not replace
+    const existing = await databases.getRow({
+      databaseId: appwriteConfig.databaseId,
+      tableId: appwriteConfig.filesCollectionId,
+      rowId: fieldId,
+    });
+
+    const existingUsers: string[] = Array.isArray(existing?.users) ? existing.users : [];
+    const merged = Array.from(new Set([...existingUsers, ...emails])).filter(Boolean);
+
     const updatedFile = await databases.updateRow({
       databaseId: appwriteConfig.databaseId,
       tableId: appwriteConfig.filesCollectionId,
       rowId: fieldId,
       data: {
-        users: emails,
+        users: merged,
       },
     });
     revalidatePath(path);

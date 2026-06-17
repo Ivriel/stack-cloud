@@ -28,8 +28,8 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
       (acc: number, f: { size: number }) => acc + (f.size ?? 0),
       0
     ) ?? 0;
-  const maxBytes = 6 * 1000 * 1000 * 1000;
-  const usedPercent = Math.min(Math.round((totalBytes / maxBytes) * 100), 100);
+  const MAX_BYTES = 2 * 1000 * 1000 * 1000; // Appwrite free tier = 2 GB
+  const usedPercent = Math.min(Math.round((totalBytes / MAX_BYTES) * 100), 100);
 
   return (
     <SidebarProvider>

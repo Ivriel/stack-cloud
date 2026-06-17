@@ -28,14 +28,14 @@ const ActionDropdown = ({ file }: { file: Models.DefaultRow }) => {
   const [actionItem, setActionItem] = useState<ActionItem | null>(null);
   const [fileName, setFileName] = useState(file.name);
   const [loading,setLoading] = useState(false);
-  const [emails,setEmails] = useState([""]);
+  const [emails,setEmails] = useState<string[]>([]);
 
   const handleCloseAllModals = () => {
     setIsModalOpen(false);
     setIsActionListOpen(false);
     setFileName(file.name);
     setActionItem(null);
-    setEmails([""]);
+    setEmails([]);
   };
 
   const handleAction = async() => {
@@ -155,7 +155,7 @@ const ActionDropdown = ({ file }: { file: Models.DefaultRow }) => {
               return (
                 <DropdownMenuItem
                   key={value}
-                  className="text-base mt-2 cursor-pointer"
+                  className="text-base mt-1 cursor-pointer hover:bg-gray-50 rounded-lg px-2 py-2 focus:bg-gray-50"
                   onClick={() => {
                     if (
                       ["rename", "share", "delete", "details"].includes(value)

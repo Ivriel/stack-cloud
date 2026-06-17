@@ -1,9 +1,20 @@
+import { Models } from "node-appwrite";
+
 export type FileType =
   | "document"
   | "image"
   | "video"
   | "audio"
   | "other";
+
+export type FileCardProps = {
+  id: string;
+  bgColor: string;
+  imgSrc: string;
+  title: string;
+  allFiles: Models.DefaultRow[];
+};
+
 
 export type RenameFile = {
   fileId: string;

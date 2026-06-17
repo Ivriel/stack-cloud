@@ -20,26 +20,25 @@ const FileDetails = ({ file }: { file: Models.DefaultRow }) => {
     },[handleFetchOwnerDetails])
 
   const renderItem = (label: string, value: string | number) => {
-    // const upperCaseClass = label === "Creator" ? "" : "uppercase"
     return (
-      <div className="mt-4 flex gap-6">
-        <span className="text-gray-500 font-medium w-20">{label}:</span>
-        <span className="font-medium text-gray-700">{value}</span>
+      <div className="flex gap-4 py-2 border-b border-gray-100 last:border-0">
+        <span className="text-gray-400 text-sm w-28 shrink-0">{label}</span>
+        <span className="text-gray-700 text-sm font-medium break-all">{value}</span>
       </div>
     );
   };
 
   return (
-    <div>
+    <div className="min-w-0">
       <FilePreview file={file} />
-      {renderItem("Type", file.extension)}
-      {renderItem("Size", getFileSize(file.size))}
-      {renderItem("Creator", ownerFullName)}
-      {renderItem("Creator Email", ownerEmail)}
-      {renderItem("Created", formatDateTime(file.$createdAt))}
-      {renderItem("Modified", formatDateTime(file.$updatedAt))}
-      
-
+      <div className="mt-3">
+        {renderItem("Type", file.extension)}
+        {renderItem("Size", getFileSize(file.size))}
+        {renderItem("Creator", ownerFullName)}
+        {renderItem("Creator Email", ownerEmail)}
+        {renderItem("Created", formatDateTime(file.$createdAt))}
+        {renderItem("Modified", formatDateTime(file.$updatedAt))}
+      </div>
     </div>
   );
 };

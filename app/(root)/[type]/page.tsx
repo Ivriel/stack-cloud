@@ -4,7 +4,6 @@ import { getFiles } from "@/lib/appwrite/file.actions";
 import { getCurrentUser } from "@/lib/appwrite/user.actions";
 import { getFileTypeParams, getTotalFileSize } from "@/lib/utils";
 import { Models } from "node-appwrite";
-import { types } from "util";
 
 const Page = async({
     searchParams,params}:

@@ -1,57 +1,93 @@
-"use client"
-import { SIDEBAR_ITEMS, USER_ICON } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import { Layers } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import React from 'react'
-import Progress from './Progress';
-import Image from 'next/image';
+"use client";
+import { SIDEBAR_ITEMS, USER_ICON } from "@/lib/constants";
+import { Layers } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
+import Progress from "./Progress";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
 
-const Sidebar = ({fullName,fileSize}:{fullName:string;fileSize:string;}) => {
-    const pathname = usePathname() 
-  return (
-   <aside className='w-66 p-4 pt-8 bg-white flex flex-col h-screen'>
-    {/* Logo */}
-    <div className='flex items-center justify-start gap-3'>
-        <Layers className='w-10 h-10 text-froly'/>
-        <span className='font-medium text-xl'>UpThings</span>
-    </div>
-
-    {/* Nav items — flex-1 biar ambil sisa space */}
-    <div className='flex flex-col mt-8 gap-4 flex-1'>
-        {SIDEBAR_ITEMS.map((sidebar) => {
-            const {name, icon:Icon, url} = sidebar || {};
-            const isActive = pathname === url;
-            return (
-                <Link
-                    key={url}
-                    href={url}
-                    className={cn(
-                        'flex items-center justify-start gap-3 cursor-pointer py-2 px-3 rounded-md',
-                        isActive ? 'bg-froly' : ''
-                    )}
-                >
-                    <Icon className={cn('w-5 h-5', isActive ? 'text-white' : 'text-gray-700')}/>
-                    <span className={cn('font-medium', isActive ? 'text-white' : 'text-gray-700')}>{name}</span>
-                </Link>
-            )
-        })}
-    </div>
-
-    {/* Storage card — selalu di bawah */}
-    <div className='bg-froly flex flex-col items-start px-4 pt-2 pb-4 rounded-md'>
-        <span className='text-white font-medium'>Storage</span>
-        <span className='text-white text-sm'>{fileSize} of 6GB</span>
-        <Progress percentage={150}/>
-    </div>
-
-    <div className='flex items-center gap-3 mt-4'>
-        <Image src={USER_ICON} alt='user-icon' width={40} height={40} className='rounded-full'/>
-        <span className='font-medium text-gray-700'>{fullName}</span>
-    </div>
-</aside>
-  )
+interface AppSidebarProps {
+  fullName: string;
+  fileSize: string;
+  usedPercent: number;
 }
 
-export default Sidebar
+const AppSidebar = ({ fullName, fileSize, usedPercent }: AppSidebarProps) => {
+  const pathname = usePathname();
+
+  return (
+    <Sidebar collapsible="offcanvas" className="border-r border-gray-100 bg-white [--sidebar-accent:theme(colors.froly)] [--sidebar-accent-foreground:theme(colors.white)]">
+      {/* Logo */}
+      <SidebarHeader className="px-4 pt-6 pb-2">
+        <div className="flex items-center gap-3">
+          <Layers className="w-9 h-9 text-froly" />
+          <span className="font-semibold text-xl">UpThings</span>
+        </div>
+      </SidebarHeader>
+
+      {/* Nav */}
+      <SidebarContent className="px-2">
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {SIDEBAR_ITEMS.map(({ name, icon: Icon, url }) => {
+                const isActive = pathname === url;
+                return (
+                  <SidebarMenuItem key={url}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      size="lg"
+                      className="rounded-md gap-3 font-medium text-gray-700"
+                    >
+                      <Link href={url}>
+                        <Icon className="w-5 h-5 shrink-0" />
+                        <span>{name}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      {/* Storage + user */}
+      <SidebarFooter className="px-4 pb-4 gap-4">
+        <div className="bg-froly rounded-xl px-4 pt-3 pb-4">
+          <span className="text-white font-semibold block">Storage</span>
+          <span className="text-white/90 text-sm">{fileSize} of 6GB</span>
+          <Progress percentage={usedPercent} />
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Image
+            src={USER_ICON}
+            alt="user avatar"
+            width={38}
+            height={38}
+            className="rounded-full object-cover"
+            unoptimized
+          />
+          <span className="font-medium text-gray-700 text-sm truncate">
+            {fullName}
+          </span>
+        </div>
+      </SidebarFooter>
+    </Sidebar>
+  );
+};
+
+export default AppSidebar;

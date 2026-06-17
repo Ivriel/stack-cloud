@@ -28,6 +28,33 @@ export const SIDEBAR_ITEMS: { name: string; icon: LucideIcon; url: string }[] = 
   }
 ]
 
+export const FILE_CARDS = [
+  {
+    id: "document",
+    title: "Documents",
+    imgSrc: "https://cdn-icons-png.flaticon.com/128/10309/10309617.png",
+    bgColor: "bg-froly",
+  },
+  {
+    id: "image",
+    title: "Images",
+    imgSrc: "https://cdn-icons-png.flaticon.com/128/9261/9261193.png",
+    bgColor: "bg-persian-pink",
+  },
+  {
+    id: "media",
+    title: "Media",
+    imgSrc: "https://cdn-icons-png.flaticon.com/128/8407/8407947.png",
+    bgColor: "bg-persimmon",
+  },
+  {
+    id: "other",
+    title: "Others",
+    imgSrc: "https://cdn-icons-png.flaticon.com/128/3059/3059838.png",
+    bgColor: "bg-jaffa",
+  },
+];
+
 export const ACTION_ITEMS:{
   value:string;
   label:string;
